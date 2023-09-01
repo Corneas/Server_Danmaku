@@ -132,16 +132,22 @@ public class PingPong : MonoBehaviour {
         //바를 생성.
         //Debug.Log("createbar");
         GameObject serverBar = Instantiate(m_serverBarPrefab) as GameObject;
-        serverBar.GetComponent<BarScript>().SetBarId(0);
+        BarScript serverBarScript = serverBar.GetComponent<BarScript>();
+        serverBarScript.SetBarId(0);
+        serverBarScript.SetHost(true);
         serverBar.name = m_serverBarPrefab.name;
+
         GameObject clientBar = Instantiate(m_clientBarPrefab) as GameObject;
-        clientBar.GetComponent<BarScript>().SetBarId(1);
+        BarScript clientBarScript = clientBar.GetComponent<BarScript>();
+        clientBarScript.SetBarId(1);
+        serverBarScript.SetHost(false);
         clientBar.name = m_clientBarPrefab.name;
 
 
         // 클라이언트의 경우는 2P용 카메라로 합니다.
-        /*
-        if (isServer == false) {
+
+        if (!isServer)
+        {
             Vector3 cameraPos = Camera.main.transform.position;
             cameraPos.y *= -1;
             cameraPos.x *= -1;
@@ -153,14 +159,14 @@ public class PingPong : MonoBehaviour {
             cameraRot.z += 180;
             Camera.main.transform.rotation = Quaternion.Euler(cameraRot);
 
-            GameObject light = GameObject.Find("Directional light");
-            Vector3 lightRot = light.transform.rotation.eulerAngles;
-            lightRot.x *= -1;
-            light.transform.rotation = Quaternion.Euler(lightRot);
+            //GameObject light = GameObject.Find("Directional light");
+            //Vector3 lightRot = light.transform.rotation.eulerAngles;
+            //lightRot.x *= -1;
+            //light.transform.rotation = Quaternion.Euler(lightRot);
         }
-        */
-        
-	}
+
+
+    }
 
 
 

@@ -45,19 +45,11 @@ public class TransportUDP : MonoBehaviour
 	// 이벤트 핸들러.
 	private EventHandler m_handler;
 
-
-	// Use this for initialization
 	void Start()
 	{
 		// 송수신 버퍼를 작성합니다.
 		m_sendQueue = new PacketQueue();
 		m_recvQueue = new PacketQueue();
-	}
-
-	// Update is called once per frame
-	void FixedUpdate()
-	{
-
 	}
 
 	void OnApplicationQuit()
