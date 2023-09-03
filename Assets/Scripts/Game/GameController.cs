@@ -67,12 +67,12 @@ public class GameController : MonoBehaviour
         m_state = State.Game;
 
         //발사할 수 있게 합니다.
-        GameObject[] bars = GameObject.FindGameObjectsWithTag("Bar");
-        foreach (GameObject obj in bars)
-        {
-            BarScript bar = obj.GetComponent<BarScript>();
-            bar.SetShotEnable(true);       //발사기능 OFF.
-        }
+        //GameObject[] bars = GameObject.FindGameObjectsWithTag("Bar");
+        //foreach (GameObject obj in bars)
+        //{
+        //    BarScript bar = obj.GetComponent<BarScript>();
+        //    bar.SetShotEnable(true);       //발사기능 OFF.
+        //}
     }
 
 

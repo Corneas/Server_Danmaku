@@ -16,7 +16,7 @@ public class MouseSerializer : Serializer
 		ret &= Serialize(packet.vertical);
 		ret &= Serialize(packet.inputSkill1);
 		ret &= Serialize(packet.inputSkill2);
-		ret &= Serialize(packet.isInput);
+		ret &= Serialize(packet.inputShift);
 		
 		return ret;
 	}
@@ -36,7 +36,7 @@ public class MouseSerializer : Serializer
 		ret &= Deserialize(ref serialized.vertical);
 		ret &= Deserialize(ref serialized.inputSkill1);
 		ret &= Deserialize(ref serialized.inputSkill2);
-		ret &= Deserialize(ref serialized.isInput);
+		ret &= Deserialize(ref serialized.inputShift);
 		//ret &= Deserialize(ref serialized.mouseButtonLeft);
 		//ret &= Deserialize(ref serialized.mouseButtonRight);
 		//ret &= Deserialize(ref serialized.mousePositionX);

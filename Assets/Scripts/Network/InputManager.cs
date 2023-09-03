@@ -5,9 +5,10 @@ public struct KeyData
 {
     public int frame;
 
-    public bool isInput;
-    public bool inputSkill1;
-    public bool inputSkill2;
+    public bool isDamaged;
+    public bool inputShift;     // 이동속도 감소
+    public bool inputSkill1;    // 1번스킬
+    public bool inputSkill2;    // 2번스킬
 
     public float horizontal;
     public float vertical;
@@ -47,11 +48,13 @@ public class InputManager : MonoBehaviour {
 
         localKeyInput.inputSkill1 = Input.GetKeyDown(KeyCode.Alpha1);
         localKeyInput.inputSkill2 = Input.GetKeyDown(KeyCode.Alpha2);
+        
+        localKeyInput.inputShift = Input.GetKey(KeyCode.LeftShift);
 
-        if (localKeyInput.horizontal != 0 && localKeyInput.vertical != 0)
-            localKeyInput.isInput = true;
-        else
-            localKeyInput.isInput = false;
+        //if (localKeyInput.horizontal != 0 || localKeyInput.vertical != 0)
+        //    localKeyInput.isInput = true;
+        //else
+        //    localKeyInput.isInput = false;
     }
 
     public KeyData GetLocalKeyData()
