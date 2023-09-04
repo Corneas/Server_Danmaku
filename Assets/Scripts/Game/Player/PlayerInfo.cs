@@ -9,6 +9,7 @@ public class PlayerInfo {
 
 	private int					playerId = 0;
 
+
 	// Use this for initialization
 	private PlayerInfo(){
 	}

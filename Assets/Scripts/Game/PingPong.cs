@@ -6,10 +6,13 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Net;
 using UnityEngine.SceneManagement;
 
-public class PingPong : MonoBehaviour {
+public class PingPong : MonoSingleton<PingPong> {
     public GameObject m_serverBarPrefab;
     public GameObject m_clientBarPrefab;
     public GameObject m_gameControllerPrefab;
+
+    public BarScript serverBar { private set; get; } = null;
+    public BarScript clientBar { private set; get; } = null;
 
 	GameMode		m_gameMode;     //게임 모드.
     float			m_timeScale;    //기본 타임 스케일을 기억해 둡니다.
@@ -24,7 +27,6 @@ public class PingPong : MonoBehaviour {
         Game,       //게임 중.
         Result,     //결과 표시.
 	};
-
 
 	void Awake()
 	{
@@ -131,17 +133,17 @@ public class PingPong : MonoBehaviour {
 	void GameStart(bool isServer){
         //바를 생성.
         //Debug.Log("createbar");
-        GameObject serverBar = Instantiate(m_serverBarPrefab) as GameObject;
-        BarScript serverBarScript = serverBar.GetComponent<BarScript>();
-        serverBarScript.SetBarId(0);
-        serverBarScript.SetHost(true);
-        serverBar.name = m_serverBarPrefab.name;
+        GameObject serverBarObj = Instantiate(m_serverBarPrefab) as GameObject;
+        serverBar = serverBarObj.GetComponent<BarScript>();
+        serverBar.SetBarId(0);
+        serverBar.SetHost(true);
+        serverBarObj.name = m_serverBarPrefab.name;
 
-        GameObject clientBar = Instantiate(m_clientBarPrefab) as GameObject;
-        BarScript clientBarScript = clientBar.GetComponent<BarScript>();
-        clientBarScript.SetBarId(1);
-        serverBarScript.SetHost(false);
-        clientBar.name = m_clientBarPrefab.name;
+        GameObject clientBarObj = Instantiate(m_clientBarPrefab) as GameObject;
+        clientBar = clientBarObj.GetComponent<BarScript>();
+        clientBar.SetBarId(1);
+        clientBar.SetHost(false);
+        clientBarObj.name = m_clientBarPrefab.name;
 
 
         // 클라이언트의 경우는 2P용 카메라로 합니다.

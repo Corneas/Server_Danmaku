@@ -4,9 +4,11 @@ using System.Collections;
 public class BarScript : MonoBehaviour {
 
     private int hp = 3;
-
+    private bool isDamaged = false;
     public float skill1Delay { private set; get; } = 8f;
     public float skill2Delay { private set; get; } = 10f;
+    private float tempSkill1Delay = 0f;
+    private float tempSkill2Delay = 0f;
 
     [SerializeField]
     private GameObject bulletPrefab = null;
@@ -21,20 +23,31 @@ public class BarScript : MonoBehaviour {
     InputManager inputManager = null;
     KeyData data;
 
+    private PlayerUI playerUI = null;
+    private SpriteRenderer spriteRenderer = null;
+
 	void Start()
 	{
         //m_shotTime = 1.0f;
         //m_shotEnable = false;
 
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
         inputManager = FindObjectOfType<InputManager>();
-	}
+        playerUI = FindObjectOfType<PlayerUI>();
+
+        tempSkill1Delay = skill1Delay;
+        tempSkill2Delay = skill2Delay;
+        data = inputManager.GetKeyData(m_id);
+    }
 
 
-	void FixedUpdate () {
+	//void FixedUpdate () {
+    void Update()
+    {
         // ID에 대응한 입력값을 얻습니다.
         // GameObject manager = GameObject.Find("InputManager");
         // KeyData data = inputManager.GetComponent<InputManager>().GetKeyData(m_id);
-        data = inputManager.GetKeyData(m_id);
 
         // 이동시킵니다.
         Vector3 pos = transform.position;
@@ -47,19 +60,19 @@ public class BarScript : MonoBehaviour {
         // 서버라면
         if(m_id == 0)
         {
-            pos.x += data.horizontal * Time.fixedDeltaTime * speed;
+            pos.x += data.horizontal * Time.deltaTime * speed;
             pos.x = Mathf.Clamp(pos.x, -3.8f, 3.8f);
 
-            pos.y += data.vertical * Time.fixedDeltaTime * speed;
+            pos.y += data.vertical * Time.deltaTime * speed;
             pos.y = Mathf.Clamp(pos.y, -4.5f, -1f);
         }
         // 클라(2p)라면
         else if(m_id == 1)
         {
-            pos.x -= data.horizontal * Time.fixedDeltaTime * speed;
+            pos.x -= data.horizontal * Time.deltaTime * speed;
             pos.x = Mathf.Clamp(pos.x, -3.5f, 3.5f);
 
-            pos.y -= data.vertical * Time.fixedDeltaTime * speed;
+            pos.y -= data.vertical * Time.deltaTime * speed;
             pos.y = Mathf.Clamp(pos.y, 1f, 4.5f);
         }
 
@@ -76,18 +89,31 @@ public class BarScript : MonoBehaviour {
         // 이동 후의 위치를 재설정한다.
         transform.position = pos;
 
-        skill1Delay += Time.fixedDeltaTime;
-        skill2Delay += Time.fixedDeltaTime;
+        tempSkill1Delay += Time.deltaTime;
+        tempSkill2Delay += Time.deltaTime;
 
-        if(skill1Delay > 1f && data.inputSkill1)
+        if(tempSkill1Delay > skill1Delay && data.inputSkill1)
         {
-            skill1Delay = 0f;
-            GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            tempSkill1Delay = 0f;
+            Bullet bullet = BulletPool.Instance.Pop(pos);
+            bullet.SetPlayerID(m_id);
+            //GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            //bullet.GetComponent<Bullet>().SetPlayerID(m_id);
+            playerUI.ReduceSkillDelay(1, skill1Delay);
         }
-        if(skill2Delay > 1f && data.inputSkill2)
+        if(tempSkill2Delay > skill2Delay && data.inputSkill2)
         {
-            skill2Delay = 0f;
-            GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            tempSkill2Delay = 0f;
+            Bullet bullet = BulletPool.Instance.Pop(pos);
+            bullet.SetPlayerID(m_id);
+            //GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            //bullet.GetComponent<Bullet>().SetPlayerID(m_id);
+            playerUI.ReduceSkillDelay(2, skill2Delay);
+        }
+
+        if (data.isDamaged)
+        {
+            StartCoroutine(IEDamaged());
         }
 
         // 버튼을 눌러 볼 발사.
@@ -122,6 +148,37 @@ public class BarScript : MonoBehaviour {
     }
 
     public void Damaged()
+    {
+        if (data.isDamaged)
+            return;
+
+        data = inputManager.GetKeyData(m_id);
+        data.isDamaged = true;
+        playerUI.UpdateUI();
+        StartCoroutine(IEDamaged());
+    }
+
+    private IEnumerator IEDamaged()
+    {
+        if (isDamaged)
+            yield break;
+
+        hp--;
+        isDamaged = true;
+        for(int i = 0; i < 3; ++i)
+        {
+            spriteRenderer.enabled = false;
+            yield return new WaitForSeconds(0.1f);
+            spriteRenderer.enabled = true;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        data = inputManager.GetKeyData(m_id);
+        data.isDamaged = false;
+        isDamaged = false;
+    }
+
+    private void Dead()
     {
 
     }

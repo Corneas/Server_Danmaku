@@ -4,7 +4,7 @@ using System.Collections;
 
 
 
-public class MouseSerializer : Serializer
+public class KeySerializer : Serializer
 {
 
 	public bool Serialize(KeyData packet)
@@ -61,7 +61,7 @@ public class InputSerializer : Serializer
 		ret &= Serialize(data.count);	
 		ret &= Serialize(data.flag);
 
-		MouseSerializer mouse = new MouseSerializer();
+		KeySerializer mouse = new KeySerializer();
 		
 		for (int i = 0; i < data.keyData.Length; ++i) {
 			mouse.Clear();
@@ -90,7 +90,7 @@ public class InputSerializer : Serializer
 		ret &= Deserialize(ref serialized.flag);
 
 		// 디시리얼라이즈 후의 버퍼 크기를 구합니다.
-		MouseSerializer key = new MouseSerializer();
+		KeySerializer key = new KeySerializer();
 		KeyData kd = new KeyData();
 		key.Serialize(kd);
 		byte[] buf= key.GetSerializedData();

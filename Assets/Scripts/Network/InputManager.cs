@@ -39,9 +39,10 @@ public class InputManager : MonoBehaviour {
 
     KeyData[] syncedKetInputs = new KeyData[2];
     KeyData localKeyInput;
-    
 
-    void FixedUpdate() 
+
+    //void FixedUpdate() 
+    private void Update()
     {
         localKeyInput.horizontal = Input.GetAxisRaw("Horizontal");
         localKeyInput.vertical = Input.GetAxisRaw("Vertical");

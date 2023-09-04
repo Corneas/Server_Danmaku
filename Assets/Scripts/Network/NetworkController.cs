@@ -146,7 +146,7 @@ public class NetworkController{
 		}
 
 		// 키버퍼에 현재 프레임의 키 정보를 추가합니다. 
-		bool update = EnqueueMouseData();
+		bool update = EnqueueKeyData();
 		
 		// 송신.
 		if (update) {
@@ -158,7 +158,7 @@ public class NetworkController{
 
 		// 키 버퍼 선두의 키 입력 정보를 반영합니다.
         if (IsSync() == false) {    //동기화된 채라면 아무것도 하지 않습니다.
-            DequeueMouseData();
+            DequeueKeyData();
         }
 
 		return IsSync();
@@ -272,7 +272,7 @@ public class NetworkController{
 
 
     //키 버퍼에 추가.(입력지연 이상의 정보는 무시하고 false를 반환).
-	public bool EnqueueMouseData()
+	public bool EnqueueKeyData()
 	{
 		PlayerInfo info = PlayerInfo.GetInstance();
 		int playerId = info.GetPlayerId();
@@ -306,7 +306,7 @@ public class NetworkController{
 	}
 
     //동기화된 입력값을 꺼냅니다.
-	public void DequeueMouseData()
+	public void DequeueKeyData()
 	{
 		// Debug.Log("DequeueMouseData");
 		// 양 단말의 데이터가 모였는지 체크합니다.
