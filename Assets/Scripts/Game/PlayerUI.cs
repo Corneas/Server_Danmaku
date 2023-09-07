@@ -24,14 +24,25 @@ public class PlayerUI : MonoBehaviour
 
     private void Awake()
     {
-        for (int i = 0; i < skillPanelSpriteRenderer.Length; ++i)
+        Init();
+
+        waitForEndOfFrame = new WaitForEndOfFrame();
+    }
+
+    private void Init()
+    {
+        for(int i = 0; i < skillDelayTmp.Length; ++i)
+        {
+            skillDelayTmp[i].gameObject.SetActive(false);
+        }
+
+        skillPanelSpriteRenderer = new Image[skillPanels.Length];
+        for (int i = 0; i < skillPanels.Length; ++i)
         {
             skillPanelSpriteRenderer[i] = skillPanels[i].GetComponent<Image>();
         }
 
         SetHeart();
-
-        waitForEndOfFrame = new WaitForEndOfFrame();
     }
 
     public void SetHeart()

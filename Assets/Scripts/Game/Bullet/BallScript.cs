@@ -72,8 +72,8 @@ public class BallScript : MonoBehaviour {
 
 
         if (col.gameObject.tag == "Bar") {
-            BarScript bar = col.gameObject.GetComponent<BarScript>();
-            SetPlayerId( bar.GetBarId() );
+            Player bar = col.gameObject.GetComponent<Player>();
+            SetPlayerId( bar.GetPlayerId() );
             m_velocity += 0.3f;
         }
 

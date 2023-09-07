@@ -810,8 +810,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d949ecbfad5322f48a8905668996e796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hpPrefab: {fileID: 7980652534032640452, guid: 269139110280240498ba4008a966faa7, type: 3}
-  hpTransform: {fileID: 0}
+  hpTransform: {fileID: 1330582850}
+  hearts: []
   skillPanels:
   - {fileID: 736736608}
   - {fileID: 1214377551}
@@ -1513,6 +1513,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1129683782}
   m_CullTransparentMesh: 1
+--- !u!1 &1181497329
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1181497330}
+  m_Layer: 0
+  m_Name: BulletPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1181497330
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1181497329}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1214377551
 GameObject:
   m_ObjectHideFlags: 0
@@ -2306,3 +2337,4 @@ SceneRoots:
   - {fileID: 606744218}
   - {fileID: 34607482}
   - {fileID: 997477603}
+  - {fileID: 1181497330}

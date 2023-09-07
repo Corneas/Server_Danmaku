@@ -6,6 +6,7 @@ public struct KeyData
     public int frame;
 
     public bool isDamaged;
+    public bool isDead;
     public bool inputShift;     // 이동속도 감소
     public bool inputSkill1;    // 1번스킬
     public bool inputSkill2;    // 2번스킬
@@ -32,7 +33,7 @@ public struct InputData
 };
 
 
-public class InputManager : MonoBehaviour {
+public class InputManager : MonoSingleton<InputManager> {
 
     //MouseData[] m_syncedInputs = new MouseData[2]; //동기화된 입력값.
     //MouseData m_localInput; //현재 입력값(이 값을 송신시킨다).

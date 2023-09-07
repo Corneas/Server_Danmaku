@@ -11,6 +11,8 @@ public class KeySerializer : Serializer
 	{
 		// 각 요소를 차례로 시리얼라이즈합니다.
 		bool ret = true;
+		ret &= Serialize(packet.isDamaged);	
+		ret &= Serialize(packet.isDead);	
 		ret &= Serialize(packet.frame);	
 		ret &= Serialize(packet.horizontal); ;
 		ret &= Serialize(packet.vertical);
@@ -31,6 +33,8 @@ public class KeySerializer : Serializer
 		}
 		
 		// 데이터의 요소별로 디시리얼라이즈합니다.
+		ret &= Deserialize(ref serialized.isDamaged);
+		ret &= Deserialize(ref serialized.isDead);
 		ret &= Deserialize(ref serialized.frame);
 		ret &= Deserialize(ref serialized.horizontal);
 		ret &= Deserialize(ref serialized.vertical);

@@ -11,8 +11,8 @@ public class PingPong : MonoSingleton<PingPong> {
     public GameObject m_clientBarPrefab;
     public GameObject m_gameControllerPrefab;
 
-    public BarScript serverBar { private set; get; } = null;
-    public BarScript clientBar { private set; get; } = null;
+    public Player serverBar { private set; get; } = null;
+    public Player clientBar { private set; get; } = null;
 
 	GameMode		m_gameMode;     //게임 모드.
     float			m_timeScale;    //기본 타임 스케일을 기억해 둡니다.
@@ -134,14 +134,14 @@ public class PingPong : MonoSingleton<PingPong> {
         //바를 생성.
         //Debug.Log("createbar");
         GameObject serverBarObj = Instantiate(m_serverBarPrefab) as GameObject;
-        serverBar = serverBarObj.GetComponent<BarScript>();
-        serverBar.SetBarId(0);
+        serverBar = serverBarObj.GetComponent<Player>();
+        serverBar.SetPlayerId(0);
         serverBar.SetHost(true);
         serverBarObj.name = m_serverBarPrefab.name;
 
         GameObject clientBarObj = Instantiate(m_clientBarPrefab) as GameObject;
-        clientBar = clientBarObj.GetComponent<BarScript>();
-        clientBar.SetBarId(1);
+        clientBar = clientBarObj.GetComponent<Player>();
+        clientBar.SetPlayerId(1);
         clientBar.SetHost(false);
         clientBarObj.name = m_clientBarPrefab.name;
 
