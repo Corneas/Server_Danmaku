@@ -145,11 +145,14 @@ public class PingPong : MonoSingleton<PingPong> {
         clientBar.SetHost(false);
         clientBarObj.name = m_clientBarPrefab.name;
 
+        serverBar.SetIsMyClient(true);
 
         // 클라이언트의 경우는 2P용 카메라로 합니다.
-
         if (!isServer)
         {
+            serverBar.SetIsMyClient(false);
+            clientBar.SetIsMyClient(true);
+
             Vector3 cameraPos = Camera.main.transform.position;
             cameraPos.y *= -1;
             cameraPos.x *= -1;

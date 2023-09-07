@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerSkill : MonoBehaviour
+public class PlayerSkill : PlayerBaseComponent
 {
     private int m_id = 0;
     private KeyData data;
@@ -14,8 +14,7 @@ public class PlayerSkill : MonoBehaviour
 
     private void Start()
     {
-        m_id = GameManager.Instance.player.GetPlayerId();
-        data = InputManager.Instance.GetKeyData(m_id);
+        m_id = player.GetPlayerId();
 
         tempSkill1Delay = skill1Delay;
         tempSkill2Delay = skill2Delay;
@@ -23,6 +22,8 @@ public class PlayerSkill : MonoBehaviour
 
     private void Update()
     {
+        data = InputManager.Instance.GetKeyData(m_id);
+
         if (data.isDead)
             return;
 
@@ -35,7 +36,8 @@ public class PlayerSkill : MonoBehaviour
             Bullet bullet = BulletPool.Instance.Pop(transform.position);
             bullet.SetPlayerID(m_id);
             bullet.SetBulletAttribute();
-            GameManager.Instance.player.playerUI.ReduceSkillDelay(1, skill1Delay);
+            if(player.GetIsMyClient())
+                player.playerUI.ReduceSkillDelay(1, skill1Delay);
         }
         if (tempSkill2Delay > skill2Delay && data.inputSkill2)
         {
@@ -43,7 +45,8 @@ public class PlayerSkill : MonoBehaviour
             Bullet bullet = BulletPool.Instance.Pop(transform.position);
             bullet.SetPlayerID(m_id);
             bullet.SetBulletAttribute();
-            GameManager.Instance.player.playerUI.ReduceSkillDelay(2, skill2Delay);
+            if (player.GetIsMyClient())
+                player.playerUI.ReduceSkillDelay(2, skill2Delay);
         }
     }
 }

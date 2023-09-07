@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private Player player = null;
+    private Player target = null;
 
     private float speed = 5f;
 
@@ -33,19 +33,14 @@ public class Bullet : MonoBehaviour
     public void SetTarget()
     {
         if (id == 1)
-            player = PingPong.Instance.serverBar;
+            target = PingPong.Instance.serverBar;
         else
-            player = PingPong.Instance.clientBar;
+            target = PingPong.Instance.clientBar;
     }
 
     public void SetSpriteColor()
     {
-        // 참여자
-        if (id == 1)
-            spriteRenderer.color = Color.white;
-        // 호스트
-        else
-            spriteRenderer.color = Color.red;
+
     }
 
     private void Update()
@@ -64,9 +59,9 @@ public class Bullet : MonoBehaviour
 
     public void CollisionCheck()
     {
-        if(Vector2.Distance(transform.position, player.transform.position) < colDis)
+        if(Vector2.Distance(transform.position, target.transform.position) < colDis)
         {
-            player.playerDamaged.Damaged();
+            target.playerDamaged.Damaged();
         }
     }
 

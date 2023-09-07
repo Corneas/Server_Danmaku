@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerMove : PlayerBaseComponent
 {
     private int m_id = 0;
     private float speed = 4f;
@@ -12,12 +12,13 @@ public class PlayerMove : MonoBehaviour
 
     private void Start()
     {
-        m_id = GameManager.Instance.player.GetPlayerId();
-        data = InputManager.Instance.GetKeyData(m_id);
+        m_id = player.GetPlayerId();
     }
 
     private void Update()
     {
+        data = InputManager.Instance.GetKeyData(m_id);
+
         if (data.isDead)
             return;
 

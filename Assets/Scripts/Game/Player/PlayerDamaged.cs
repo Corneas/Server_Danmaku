@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerDamaged : MonoBehaviour
+public class PlayerDamaged : PlayerBaseComponent
 {
     private int m_id = 0;
     private KeyData data;
@@ -13,14 +13,15 @@ public class PlayerDamaged : MonoBehaviour
 
     private void Start()
     {
-        m_id = GameManager.Instance.player.GetPlayerId();
-        data = InputManager.Instance.GetKeyData(m_id);
+        m_id = player.GetPlayerId();
 
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
     {
+        data = InputManager.Instance.GetKeyData(m_id);
+
         if (data.isDamaged)
         {
             StartCoroutine(IEDamaged());
@@ -32,11 +33,11 @@ public class PlayerDamaged : MonoBehaviour
         if (data.isDamaged || data.isDead)
             return;
 
-        if (GameManager.Instance.player.Hp <= 0)
+        if (player.Hp <= 0)
             Dead();
 
         data.isDamaged = true;
-        GameManager.Instance.player.playerUI.UpdateUI();
+        player.playerUI.UpdateUI();
         StartCoroutine(IEDamaged());
     }
 
@@ -45,7 +46,7 @@ public class PlayerDamaged : MonoBehaviour
         if (isDamaged)
             yield break;
 
-        GameManager.Instance.player.Hp--;
+        player.Hp--;
         isDamaged = true;
         for (int i = 0; i < 3; ++i)
         {
