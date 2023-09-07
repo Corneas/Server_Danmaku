@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Net;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class PingPong : MonoSingleton<PingPong> {
     public GameObject m_serverBarPrefab;
@@ -14,8 +16,17 @@ public class PingPong : MonoSingleton<PingPong> {
     public Player serverBar { private set; get; } = null;
     public Player clientBar { private set; get; } = null;
 
+    private 
+
 	GameMode		m_gameMode;     //게임 모드.
     float			m_timeScale;    //기본 타임 스케일을 기억해 둡니다.
+
+    [SerializeField]
+    private GameObject waitBtn = null;
+    [SerializeField]
+    private GameObject joinBtn = null;
+    [SerializeField]
+    private TMP_InputField ipInputField = null;
 
     //네트워크.
     string m_hostAddress;
@@ -173,59 +184,83 @@ public class PingPong : MonoSingleton<PingPong> {
 
     }
 
+    public void WaitOpponent()
+    {
+        PlayerInfo info = PlayerInfo.GetInstance();
+        m_hostAddress = ipInputField.text;
+        m_networkController = new NetworkController(m_hostAddress, true);    //서버 시작.
+        info.SetPlayerId(0);  // 플레이어 ID를 설정합니다.
+        ToggleJoinBtns();
+    }
 
+    public void JoinAsOpponent()
+    {
+        PlayerInfo info = PlayerInfo.GetInstance();
+        m_hostAddress = ipInputField.text;
+        m_networkController = new NetworkController(m_hostAddress, false);   // 클라이언트 시작.
+        info.SetPlayerId(1);  // 플레이어 ID를 설정합니다.
+        ToggleJoinBtns();
+    }
+
+    public void ToggleJoinBtns()
+    {
+        waitBtn.SetActive(!waitBtn.activeSelf);
+        joinBtn.SetActive(!joinBtn.activeSelf);
+        ipInputField.gameObject.SetActive(!ipInputField.gameObject.activeSelf);
+    }
 
     void OnGUI() {
         //버튼이 눌리면 통신 시작.
-        if (m_networkController == null) {
-            PlayerInfo info = PlayerInfo.GetInstance();
+        //     if (m_networkController == null) {
+        //         PlayerInfo info = PlayerInfo.GetInstance();
 
-			int x = 50;
-			int y = 650;
+        //int x = 50;
+        //int y = 650;
 
-			// 클라이언트를 선택했을 때 접속할 서버의 주소를 입력합니다.
-			GUIStyle style = new GUIStyle();
-			style.fontSize = 18;
-			style.fontStyle = FontStyle.Bold;
-			style.normal.textColor = Color.black;
-			GUI.Label(new Rect(x, y-25, 200.0f, 50.0f), "대전 상대의 IP 주소", style);
-			m_hostAddress = GUI.TextField(new Rect(x, y, 200, 20), m_hostAddress);
-			y += 25;
+        //// 클라이언트를 선택했을 때 접속할 서버의 주소를 입력합니다.
+        //GUIStyle style = new GUIStyle();
+        //style.fontSize = 18;
+        //style.fontStyle = FontStyle.Bold;
+        //style.normal.textColor = Color.black;
+        //GUI.Label(new Rect(x, y-25, 200.0f, 50.0f), "대전 상대의 IP 주소", style);
+        //m_hostAddress = GUI.TextField(new Rect(x, y, 200, 20), m_hostAddress);
+        //y += 25;
 
-			if (GUI.Button(new Rect(x, y, 150, 20), "대전 상대를 기다립니다")) {
-				m_networkController = new NetworkController(m_hostAddress, true);    //서버 시작.
-                info.SetPlayerId( 0 );  // 플레이어 ID를 설정합니다.
+        //if (GUI.Button(new Rect(x, y, 150, 20), "대전 상대를 기다립니다")) {
+        //	m_networkController = new NetworkController(m_hostAddress, true);    //서버 시작.
+        //             info.SetPlayerId( 0 );  // 플레이어 ID를 설정합니다.
 
-                //GameObject.Find("Title").SetActive(false); //타이틀 표시 OFF.
-            }
+        //             //GameObject.Find("Title").SetActive(false); //타이틀 표시 OFF.
+        //         }
 
-			if (GUI.Button(new Rect(x+160, y, 150, 20), "대전 상대와 접속합니다")) {
-                m_networkController = new NetworkController(m_hostAddress, false);   // 클라이언트 시작.
-                info.SetPlayerId( 1 );  // 플레이어 ID를 설정합니다.
+        //if (GUI.Button(new Rect(x+160, y, 150, 20), "대전 상대와 접속합니다")) {
+        //             m_networkController = new NetworkController(m_hostAddress, false);   // 클라이언트 시작.
+        //             info.SetPlayerId( 1 );  // 플레이어 ID를 설정합니다.
 
-                //GameObject.Find("Title").SetActive(false); // 타이틀 표시 OFF.
-            }
-        }
+        //             //GameObject.Find("Title").SetActive(false); // 타이틀 표시 OFF.
+        //         }
+        //     }
 
 
         //결과 화면 종료 시는 버튼으로 리셋할 수 있게 합니다.
         //GameObject resultController = GameObject.Find(m_resultControllerPrefab.name);
         //if (resultController && resultController.GetComponent<ResultController>().IsEnd()) {
-            // 종료 버튼 표시.
-            //if (GUI.Button(new Rect(20, Screen.height - 100, 80, 80), "RESET")) {
-            //    SceneManager.LoadScene("PingPong");
-            //} 
-			//return;
+        // 종료 버튼 표시.
+        //if (GUI.Button(new Rect(20, Screen.height - 100, 80, 80), "RESET")) {
+        //    SceneManager.LoadScene("PingPong");
+        //} 
+        //return;
         //}
 
-		// 연결 끊김 확인 .
-		if (m_networkController != null &&
-			m_networkController.IsConnected() == false &&
-		    m_networkController.IsSuspned() == false &&
-		    m_networkController.GetSyncState() != NetworkController.SyncState.NotStarted) {
-			// 끊었습니다.
-			NotifyDisconnection(); 
-		}
+        // 연결 끊김 확인 .
+        if (m_networkController != null &&
+            m_networkController.IsConnected() == false &&
+            m_networkController.IsSuspned() == false &&
+            m_networkController.GetSyncState() != NetworkController.SyncState.NotStarted)
+        {
+            // 끊었습니다.
+            NotifyDisconnection();
+        }
     }
 
 	

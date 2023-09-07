@@ -48,9 +48,10 @@ public class InputManager : MonoSingleton<InputManager> {
         localKeyInput.horizontal = Input.GetAxisRaw("Horizontal");
         localKeyInput.vertical = Input.GetAxisRaw("Vertical");
 
-        localKeyInput.inputSkill1 = Input.GetKeyDown(KeyCode.Alpha1);
-        localKeyInput.inputSkill2 = Input.GetKeyDown(KeyCode.Alpha2);
-        
+
+        localKeyInput.inputSkill1 = Input.GetKey(KeyCode.Alpha1);
+        localKeyInput.inputSkill2 = Input.GetKey(KeyCode.Alpha2);
+
         localKeyInput.inputShift = Input.GetKey(KeyCode.LeftShift);
 
         //if (localKeyInput.horizontal != 0 || localKeyInput.vertical != 0)

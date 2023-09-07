@@ -26,7 +26,6 @@ public class Player : MonoBehaviour {
 
     private KeyData data;
     private float speed = 4f;
-
     private Vector3 pos;
 
     public PlayerUI playerUI { private set; get; } = null;
@@ -37,8 +36,6 @@ public class Player : MonoBehaviour {
 	{
         playerUI = FindObjectOfType<PlayerUI>();
         playerDamaged = GetComponent<PlayerDamaged>();
-        data = InputManager.Instance.GetKeyData(m_id);
-
     }
 
     public int GetPlayerId() {
@@ -63,6 +60,7 @@ public class Player : MonoBehaviour {
     {
         isMyClient = _isMyClient;
     }
+
     public bool GetIsMyClient()
     {
         return isMyClient;

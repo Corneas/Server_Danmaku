@@ -40,6 +40,7 @@ public class PlayerUI : MonoBehaviour
         for (int i = 0; i < skillPanels.Length; ++i)
         {
             skillPanelSpriteRenderer[i] = skillPanels[i].GetComponent<Image>();
+            skillPanelSpriteRenderer[i].gameObject.SetActive(false);
         }
 
         SetHeart();
@@ -68,28 +69,28 @@ public class PlayerUI : MonoBehaviour
         damagedCount++;
     }
 
-    public void ReduceSkillDelay(int skillNum, float skillCool)
+    public void ReduceSkillDelay(int skillNum, float skillCool, PlayerSkill playerSkill)
     {
-        StartCoroutine(IEReduceSkillDelay(skillNum, skillCool));
+        StartCoroutine(IEReduceSkillDelay(skillNum, skillCool, playerSkill));
     }
 
-    public IEnumerator IEReduceSkillDelay(int skillNum, float skillCool)
+    public IEnumerator IEReduceSkillDelay(int skillNum, float skillCool, PlayerSkill playerSkill)
     {
         int num = skillNum - 1;
         skillDelayTmp[num].gameObject.SetActive(true);
+        skillPanelSpriteRenderer[num].gameObject.SetActive(true);
 
-        while(skillCool > 0)
+        while (playerSkill.GetSkillDelay(skillNum) > 0)
         {
-            skillCool -= Time.deltaTime;
+            skillDelayTmp[num].SetText(Mathf.RoundToInt(playerSkill.GetSkillDelay(skillNum)).ToString());
 
-            skillDelayTmp[num].SetText(Mathf.RoundToInt(skillCool).ToString());
-
-            skillPanelSpriteRenderer[num].fillAmount = 1 / skillCool;
+            skillPanelSpriteRenderer[num].fillAmount = playerSkill.GetSkillDelay(skillNum) / skillCool;
 
             yield return waitForEndOfFrame;
         }
 
         skillDelayTmp[num].gameObject.SetActive(false);
+        skillPanelSpriteRenderer[num].gameObject.SetActive(false);
         yield return null;
     }
 }

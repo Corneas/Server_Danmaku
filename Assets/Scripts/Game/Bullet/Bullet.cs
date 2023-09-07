@@ -5,11 +5,8 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     private Player target = null;
-
     private float speed = 5f;
-
     private int id = 0;
-
     private float colDis = 0.5f;
 
     private SpriteRenderer spriteRenderer = null;
@@ -19,15 +16,20 @@ public class Bullet : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    private void OnEnable()
+    {
+        spriteRenderer.color = Color.red;
+    }
+
     public void SetPlayerID(int _id)
     {
         id = _id;
     }
 
-    public void SetBulletAttribute()
+    public void SetBulletAttribute(bool isMyClient)
     {
         SetTarget();
-        SetSpriteColor();
+        SetSpriteColor(isMyClient);
     }
 
     public void SetTarget()
@@ -38,9 +40,10 @@ public class Bullet : MonoBehaviour
             target = PingPong.Instance.clientBar;
     }
 
-    public void SetSpriteColor()
+    public void SetSpriteColor(bool isMyClient)
     {
-
+        if (isMyClient)
+            spriteRenderer.color = Color.white;
     }
 
     private void Update()
@@ -55,6 +58,8 @@ public class Bullet : MonoBehaviour
             Pool();
         if(transform.position.y < -5f)
             Pool();
+
+        CollisionCheck();
     }
 
     public void CollisionCheck()
