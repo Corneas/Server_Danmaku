@@ -11,43 +11,62 @@ public class PlayerDamaged : PlayerBaseComponent
 
     private SpriteRenderer spriteRenderer = null;
 
+    private Coroutine damagedCo = null;
+
     private void Start()
     {
         m_id = player.GetPlayerId();
 
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        damagedCo = null;
     }
 
     private void Update()
     {
         data = InputManager.Instance.GetKeyData(m_id);
 
-        if (data.isDamaged)
+        if (data.isDamaged && damagedCo == null)
         {
-            StartCoroutine(IEDamaged());
+            damagedCo = StartCoroutine(IEDamaged());
         }
     }
 
+    // 데미지를 입었음을 서버에 보내기 위함
     public void Damaged()
     {
         if (data.isDamaged || data.isDead)
             return;
 
-        if (player.Hp <= 0)
-            Dead();
-
         data.isDamaged = true;
-        player.playerUI.UpdateUI();
-        StartCoroutine(IEDamaged());
+        InputManager.Instance.SetInputData(m_id, data);
     }
 
+    // 클라에서 보이는 데미지를 입었을 경우
     private IEnumerator IEDamaged()
     {
         if (isDamaged)
             yield break;
 
-        player.Hp--;
         isDamaged = true;
+
+        player.Hp--;
+
+        if (player.GetIsMyClient())
+            player.playerUI.UpdateUI();
+
+        if (player.Hp <= 0)
+        {
+            Dead();
+
+            data.isDamaged = false;
+            isDamaged = false;
+            damagedCo = null;
+            InputManager.Instance.SetInputData(m_id, data);
+
+            yield break;
+        }
+
         for (int i = 0; i < 3; ++i)
         {
             spriteRenderer.enabled = false;
@@ -58,11 +77,14 @@ public class PlayerDamaged : PlayerBaseComponent
 
         data.isDamaged = false;
         isDamaged = false;
+        damagedCo = null;
+        InputManager.Instance.SetInputData(m_id, data);
     }
 
     private void Dead()
     {
         data.isDead = true;
-        Debug.Log($"{gameObject.name} Dead");
+        InputManager.Instance.SetInputData(m_id, data);
+        player.gameObject.SetActive(false);
     }
 }

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private Player target = null;
-    private float speed = 5f;
-    private int id = 0;
-    private float colDis = 0.5f;
+    protected Player target = null;
+    protected float speed = 5f;
+    protected int id = 0;
+    protected float colDis = 0.25f;
 
-    private SpriteRenderer spriteRenderer = null;
+    protected SpriteRenderer spriteRenderer = null;
 
     private void Awake()
     {
@@ -46,20 +46,30 @@ public class Bullet : MonoBehaviour
             spriteRenderer.color = Color.white;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
-        transform.position += Vector3.right * Time.deltaTime * speed;
+        Move();
 
-        if(transform.position.x > 5f)
-            Pool();
-        if(transform.position.x < -5f)
-            Pool();
-        if(transform.position.y > 5f)
-            Pool();
-        if(transform.position.y < -5f)
-            Pool();
+        DeadLineCheck();
 
         CollisionCheck();
+    }
+
+    protected virtual void Move()
+    {
+        transform.position += transform.right * Time.deltaTime * speed;
+    }
+
+    public void DeadLineCheck()
+    {
+        if (transform.position.x > 5f)
+            Pool();
+        if (transform.position.x < -5f)
+            Pool();
+        if (transform.position.y > 5f)
+            Pool();
+        if (transform.position.y < -5f)
+            Pool();
     }
 
     public void CollisionCheck()
@@ -72,6 +82,6 @@ public class Bullet : MonoBehaviour
 
     public void Pool()
     {
-        BulletPool.Instance.Push(this);
+        PoolManager.Release(this);
     }
 }

@@ -14,8 +14,9 @@ public class KeySerializer : Serializer
 		ret &= Serialize(packet.isDamaged);	
 		ret &= Serialize(packet.isDead);	
 		ret &= Serialize(packet.frame);	
-		ret &= Serialize(packet.horizontal); ;
+		ret &= Serialize(packet.horizontal);
 		ret &= Serialize(packet.vertical);
+		ret &= Serialize(packet.inputSpace);	
 		ret &= Serialize(packet.inputSkill1);
 		ret &= Serialize(packet.inputSkill2);
 		ret &= Serialize(packet.inputShift);
@@ -38,6 +39,7 @@ public class KeySerializer : Serializer
 		ret &= Deserialize(ref serialized.frame);
 		ret &= Deserialize(ref serialized.horizontal);
 		ret &= Deserialize(ref serialized.vertical);
+		ret &= Deserialize(ref serialized.inputSpace);
 		ret &= Deserialize(ref serialized.inputSkill1);
 		ret &= Deserialize(ref serialized.inputSkill2);
 		ret &= Deserialize(ref serialized.inputShift);

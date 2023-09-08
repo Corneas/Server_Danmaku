@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-    private int hp;
+    private int hp = 3;
     public int Hp
     {
         set
@@ -34,6 +34,7 @@ public class Player : MonoBehaviour {
 
 	void Start()
 	{
+        hp = 3;
         playerUI = FindObjectOfType<PlayerUI>();
         playerDamaged = GetComponent<PlayerDamaged>();
     }

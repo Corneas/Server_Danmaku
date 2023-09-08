@@ -7,6 +7,7 @@ public struct KeyData
 
     public bool isDamaged;
     public bool isDead;
+    public bool inputSpace;     // 기본 총알 발사
     public bool inputShift;     // 이동속도 감소
     public bool inputSkill1;    // 1번스킬
     public bool inputSkill2;    // 2번스킬
@@ -48,7 +49,7 @@ public class InputManager : MonoSingleton<InputManager> {
         localKeyInput.horizontal = Input.GetAxisRaw("Horizontal");
         localKeyInput.vertical = Input.GetAxisRaw("Vertical");
 
-
+        localKeyInput.inputSpace = Input.GetKey(KeyCode.Space);
         localKeyInput.inputSkill1 = Input.GetKey(KeyCode.Alpha1);
         localKeyInput.inputSkill2 = Input.GetKey(KeyCode.Alpha2);
 
